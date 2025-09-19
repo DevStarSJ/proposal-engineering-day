@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSearch | 월간 Engineering Day 제안서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutral Tones -->
+    <!-- Application Structure Plan: The SPA is designed as a single-page, top-to-bottom narrative scroll, mirroring a persuasive presentation flow. It starts with a Hero section stating the proposal, followed by the 'Why' (Problems), 'What' (The Plan & Schedule visualization), 'How' (Interactive tabbed session details), and 'Impact' (Benefits grid). This structure was chosen to guide the user logically through the argument for the Engineering Day, making the proposal easy to understand and visually engaging, which is more effective than a static document. -->
+    <!-- Visualization & Content Choices: 1. Problems -> Goal: Inform -> Method: Icon+Text Grid -> Interaction: None, for clarity -> Justification: More scannable and visually interesting than a bullet list. 2. Schedule -> Goal: Inform -> Method: Chart.js Doughnut Chart -> Interaction: Hover tooltips -> Justification: Visually represents the time allocation (Lunch, Session, Break), making the half-day commitment easy to grasp instantly. 3. Session Ideas -> Goal: Organize/Compare -> Method: JS-powered Tabs -> Interaction: Click to switch content -> Justification: Prevents information overload by showing one session type at a time while allowing easy exploration of all options. 4. Benefits -> Goal: Inform -> Method: Icon+Card Grid -> Interaction: Hover effect -> Justification: Breaks down benefits into digestible, visually distinct chunks. CONFIRMED no SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .tab-active {
+            border-color: #1e40af; /* blue-800 */
+            color: #1e40af; /* blue-800 */
+            background-color: #eff6ff; /* blue-50 */
+        }
+        .tab-inactive {
+            border-color: #d1d5db; /* gray-300 */
+            color: #4b5563; /* gray-600 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-blue-800">DeepSearch Engineering</h1>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#problem" class="text-gray-600 hover:text-blue-800">Why?</a>
+                <a href="#proposal" class="text-gray-600 hover:text-blue-800">What?</a>
+                <a href="#sessions" class="text-gray-600 hover:text-blue-800">How?</a>
+                <a href="#effects" class="text-gray-600 hover:text-blue-800">Impact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="bg-blue-800 text-white text-center py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-6xl font-extrabold leading-tight">월간 Engineering Day 도입 제안</h2>
+                <p class="mt-4 text-lg md:text-xl text-blue-200">더 나은 엔지니어링 팀을 위한 협업과 성장 부스팅 프로그램</p>
+            </div>
+        </section>
+
+        <section id="problem" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-900">우리의 고민은 무엇일까요?</h3>
+                    <p class="mt-4 text-lg text-gray-600">두 개의 훌륭한 목적 조직이 시너지를 내기 위해선 해결해야 할 과제들이 있습니다.</p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+                        <div class="text-4xl mb-4">🧱</div>
+                        <h4 class="text-xl font-semibold mb-2">팀 간의 교류 부족</h4>
+                        <p class="text-gray-600">FAI팀과 M&A팀 간의 기술적, 문화적 교류가 부족하여 시너지 창출에 어려움이 있습니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+                        <div class="text-4xl mb-4"> silo </div>
+                        <h4 class="text-xl font-semibold mb-2">지식의 사일로 현상</h4>
+                        <p class="text-gray-600">각 팀의 기술적 고민과 노하우가 내부에서만 공유되어 전사적 자산이 되지 못합니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+                        <div class="text-4xl mb-4">🔄</div>
+                        <h4 class="text-xl font-semibold mb-2">리소스 낭비 가능성</h4>
+                        <p class="text-gray-600">유사한 문제를 각 팀에서 개별적으로 해결하며 불필요한 리소스가 낭비될 수 있습니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+                        <div class="text-4xl mb-4">🤝</div>
+                        <h4 class="text-xl font-semibold mb-2">결속력 약화 우려</h4>
+                        <p class="text-gray-600">엔지니어링 팀 전체의 소속감 및 결속력이 약화되어 공동의 목표 의식이 저하될 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="proposal" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-900">제안: 월간 Engineering Day!</h3>
+                    <p class="mt-4 text-lg text-gray-600">매월 단 반나절의 투자를 통해 팀의 성장과 협업을 이끌어내는 정기 프로그램입니다.</p>
+                </div>
+
+                <div class="mt-12 bg-white p-8 rounded-xl shadow-lg flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-full md:w-1/2 lg:w-3/5">
+                        <h4 class="text-2xl font-bold mb-4">Standard Flow: 이렇게 진행됩니다.</h4>
+                        <ul class="space-y-4 text-lg">
+                            <li class="flex items-start">
+                                <span class="text-blue-600 font-bold mr-3 text-xl">🕛</span>
+                                <div>
+                                    <strong class="block">12:00 ~ 13:30 (90분) : 함께하는 점심 식사</strong>
+                                    <p class="text-gray-600">단순 식사를 넘어 팀의 유대감을 형성하는 시간. 10명 모두가 함께할 수 있는 공간에서 진행합니다.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                               <span class="text-blue-600 font-bold mr-3 text-xl">☕</span>
+                                <div>
+                                    <strong class="block">13:30 ~ 14:00 (30분) : 휴식 및 커피 타임</strong>
+                                    <p class="text-gray-600">오후 세션을 준비하며 편안하게 대화하는 시간입니다.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-blue-600 font-bold mr-3 text-xl">👨‍💻</span>
+                                <div>
+                                    <strong class="block">14:00 ~ 17:00 (180분) : 엔지니어링 세션</strong>
+                                    <p class="text-gray-600">매월 새로운 주제로 기술 공유, 토론, 워크숍 등을 진행하여 함께 성장합니다.</p>
+                                </div>
+                            </li>
+                        </ul>
+                         <div class="mt-6 border-t pt-6">
+                            <h5 class="font-semibold text-xl mb-2">핵심 운영 계획</h5>
+                            <div class="grid grid-cols-2 gap-4 text-gray-700">
+                                <p><strong>🗓️ 일시:</strong> 매월 셋째 주 목요일</p>
+                                <p><strong>👥 대상:</strong> 엔지니어링 파트 전원 (10명)</p>
+                                <p><strong>📍 장소:</strong> 본사 회의실 및 인근 식당</p>
+                                <p><strong>💰 예산:</strong> 중식비 및 간식비</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 lg:w-2/5">
+                        <div class="chart-container mx-auto" style="position: relative; height:350px; max-width:350px;">
+                            <canvas id="scheduleChart"></canvas>
+                        </div>
+                        <p class="text-center mt-2 text-gray-500">하루 시간 배분 시각화</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="sessions" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-900">How? 무엇을 하게 될까요?</h3>
+                    <p class="mt-4 text-lg text-gray-600">다양한 포맷의 세션을 통해 참여도와 흥미를 유지하며 실질적인 성장을 도모합니다.</p>
+                </div>
+                <div class="mt-12 max-w-4xl mx-auto">
+                    <div class="flex border-b border-gray-300">
+                        <button class="tab-btn tab-active py-3 px-6 font-semibold text-lg border-b-2" data-tab="first-session">첫 세션 예시</button>
+                        <button class="tab-btn tab-inactive py-3 px-6 font-semibold text-lg border-b-2" data-tab="future-sessions">향후 아이디어</button>
+                    </div>
+                    <div class="pt-8">
+                        <div id="first-session" class="tab-content">
+                            <h4 class="text-2xl font-bold mb-4">💡 첫 세션: "우리들의 기술 고민 해결 워크숍"</h4>
+                            <p class="mb-6 text-gray-700">가장 시급하고 중요한 문제부터 함께 해결하며 Engineering Day를 시작합니다. 팀의 벽을 허물고 실질적인 해결책을 찾는 것을 목표로 합니다.</p>
+                            <div class="space-y-4">
+                                <div class="bg-blue-50 p-4 rounded-lg flex items-center">
+                                    <span class="font-bold text-blue-800 w-32">[14:00-15:00]</span>
+                                    <span>FAI팀과 M&A팀이 현재 겪고 있는 가장 큰 기술적 난제를 공유합니다.</span>
+                                </div>
+                                <div class="bg-blue-50 p-4 rounded-lg flex items-center">
+                                    <span class="font-bold text-blue-800 w-32">[15:00-16:30]</span>
+                                    <span>모든 엔지니어가 함께 해결책을 모색하고 자유롭게 토론합니다.</span>
+                                </div>
+                                <div class="bg-blue-50 p-4 rounded-lg flex items-center">
+                                    <span class="font-bold text-blue-800 w-32">[16:30-17:00]</span>
+                                    <span>토론 결과를 바탕으로 실제 시도해 볼 액션 아이템을 정하고 회고합니다.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="future-sessions" class="tab-content hidden">
+                            <h4 class="text-2xl font-bold mb-4">🚀 향후 세션 아이디어</h4>
+                            <p class="mb-6 text-gray-700">워크숍 외에도 다양한 활동을 통해 지속적인 성장 기회를 제공합니다.</p>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="border border-gray-200 p-6 rounded-lg">
+                                    <h5 class="font-bold text-xl mb-2">기술 부채 청산의 날</h5>
+                                    <p>미니 해커톤 형식으로, 모두를 괴롭히던 작은 기술 부채를 함께 해결하며 즉각적인 성취감을 얻습니다.</p>
+                                </div>
+                                <div class="border border-gray-200 p-6 rounded-lg">
+                                    <h5 class="font-bold text-xl mb-2">Code Reading Club</h5>
+                                    <p>유명 오픈소스 코드를 함께 읽고 분석하며 설계 능력과 코드 품질에 대한 인사이트를 나눕니다.</p>
+                                </div>
+                                <div class="border border-gray-200 p-6 rounded-lg">
+                                    <h5 class="font-bold text-xl mb-2">신규 기술 스터디 & PoC</h5>
+                                    <p>팀에 도입해볼 만한 신규 기술/아키텍처를 함께 스터디하고 간단한 PoC를 진행하며 기술 역량을 강화합니다.</p>
+                                </div>
+                                 <div class="border border-gray-200 p-6 rounded-lg">
+                                    <h5 class="font-bold text-xl mb-2">멘토링 세션</h5>
+                                    <p>주니어와 시니어 엔지니어가 짝을 이루어 특정 주제에 대해 깊이 있는 지식을 공유하고 함께 성장합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="effects" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-900">Impact: 어떤 변화를 만들 수 있을까요?</h3>
+                    <p class="mt-4 text-lg text-gray-600">Engineering Day는 단순한 이벤트를 넘어, 팀과 회사에 실질적인 가치를 제공하는 투자가 될 것입니다.</p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <h4 class="text-xl font-bold text-blue-800 mb-2">소통 및 협업 강화</h4>
+                        <p>팀 간의 기술적, 인간적 교류가 활성화되어 자연스럽게 협업 문화가 정착되고 기술 장벽이 해소됩니다.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <h4 class="text-xl font-bold text-blue-800 mb-2">기술 수준 향상</h4>
+                        <p>전사 코드 품질 및 아키텍처에 대한 이해도가 증진되고, 새로운 기술을 학습하며 개인과 팀의 역량이 강화됩니다.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <h4 class="text-xl font-bold text-blue-800 mb-2">문제 해결 능력 증대</h4>
+                        <p>집단 지성을 통해 복잡한 기술 문제를 더 빠르고 효율적으로 해결하는 능력이 향상됩니다.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <h4 class="text-xl font-bold text-blue-800 mb-2">최고의 엔지니어링 문화</h4>
+                        <p>함께 배우고 성장하는 문화를 통해 팀 만족도와 자부심을 높여, 훌륭한 인재가 오고 싶어 하는 팀을 만듭니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; DeepSearch Engineering. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scheduleData = {
+                labels: ['엔지니어링 세션 (180분)', '점심 식사 (90분)', '휴식 및 준비 (30분)'],
+                datasets: [{
+                    label: '시간 배분',
+                    data: [180, 90, 30],
+                    backgroundColor: [
+                        '#2563eb',
+                        '#60a5fa',
+                        '#dbeafe',
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            };
+
+            const scheduleConfig = {
+                type: 'doughnut',
+                data: scheduleData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14,
+                                    family: "'Noto Sans KR', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '분';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            };
+            
+            const scheduleChartCanvas = document.getElementById('scheduleChart');
+            if(scheduleChartCanvas) {
+                new Chart(scheduleChartCanvas, scheduleConfig);
+            }
+
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('tab-inactive');
+                    });
+                    button.classList.add('tab-active');
+                    button.classList.remove('tab-inactive');
+
+                    tabContents.forEach(content => {
+                        if (content.id === tabId) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
